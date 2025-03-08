@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.title }} - College Fest{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">{{ quiz.title }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">{{ quiz.description }}</p>
+                
+                <form method="POST" action="{{ url_for('submit_quiz', quiz_id=quiz.id) }}">
+                    {% for question in quiz.questions %}
+                    <div class="mb-4">
+                        <h5>Question {{ loop.index }}</h5>
+                        <p class="mb-3">{{ question.question_text }}</p>
+                        
+                        {% for option in question.get_options() %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" 
+                                   name="question_{{ question.id }}" 
+                                   id="q{{ question.id }}_{{ loop.index }}"
+                                   value="{{ option }}" required>
+                            <label class="form-check-label" for="q{{ question.id }}_{{ loop.index }}">
+                                {{ option }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Quiz</button>
+                        <a href="{{ url_for('quizzes') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

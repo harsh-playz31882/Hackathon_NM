@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - College Fest{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Event Registrations -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">My Event Registrations</h4>
+            </div>
+            <div class="card-body">
+                {% if registrations %}
+                <div class="list-group">
+                    {% for registration in registrations %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ registration.event.name }}</h5>
+                        <p class="mb-1">{{ registration.event.description }}</p>
+                        <ul class="list-unstyled">
+                            <li><strong>Date:</strong> {{ registration.event.date.strftime('%Y-%m-%d %H:%M') }}</li>
+                            <li><strong>Venue:</strong> {{ registration.event.venue }}</li>
+                            <li><strong>Registered on:</strong> {{ registration.registration_date.strftime('%Y-%m-%d %H:%M') }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>You haven't registered for any events yet.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Browse Events</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Attempts -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">My Quiz Attempts</h4>
+            </div>
+            <div class="card-body">
+                {% if quiz_attempts %}
+                <div class="list-group">
+                    {% for attempt in quiz_attempts %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ attempt.quiz.title }}</h5>
+                        <p class="mb-1">Score: {{ attempt.score }}</p>
+                        <small>Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</small>
+                        {% if attempt.completed %}
+                        <span class="badge bg-success">Completed</span>
+                        {% else %}
+                        <span class="badge bg-warning">In Progress</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>You haven't attempted any quizzes yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - College Fest{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">User Profile</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_profile') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <hr>
+                    <h5>Change Password</h5>
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- User's Event Registrations -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">My Event Registrations</h4>
+            </div>
+            <div class="card-body">
+                {% if user.registrations %}
+                <div class="list-group">
+                    {% for registration in user.registrations %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ registration.event.name }}</h5>
+                        <p class="mb-1">{{ registration.event.description }}</p>
+                        <small>Registered on: {{ registration.registration_date.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>You haven't registered for any events yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- User's Quiz Attempts -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">My Quiz Attempts</h4>
+            </div>
+            <div class="card-body">
+                {% if user.quiz_attempts %}
+                <div class="list-group">
+                    {% for attempt in user.quiz_attempts %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ attempt.quiz.title }}</h5>
+                        <p class="mb-1">Score: {{ attempt.score }}</p>
+                        <small>Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>You haven't attempted any quizzes yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - College Fest{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Quiz Results: {{ attempt.quiz.title }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h5>Your Score</h5>
+                    <h2>{{ attempt.score }}/{{ attempt.quiz.questions|length }}</h2>
+                    <p class="text-muted">Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    
+                    {% set percentage = (attempt.score / attempt.quiz.questions|length * 100)|round|int %}
+                    {% if percentage >= 80 %}
+                        <div class="alert alert-success">Excellent! Great job!</div>
+                    {% elif percentage >= 60 %}
+                        <div class="alert alert-info">Good effort! Keep it up!</div>
+                    {% else %}
+                        <div class="alert alert-warning">Keep practicing! You can do better!</div>
+                    {% endif %}
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('quizzes') }}" class="btn btn-primary">Back to Quizzes</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Go to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
