@@ -1,65 +1,105 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard - College Fest{% endblock %}
-
-{% block content %}
-<div class="row">
-    <!-- Event Registrations -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">My Event Registrations</h4>
-            </div>
-            <div class="card-body">
-                {% if registrations %}
-                <div class="list-group">
-                    {% for registration in registrations %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ registration.event.name }}</h5>
-                        <p class="mb-1">{{ registration.event.description }}</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Date:</strong> {{ registration.event.date.strftime('%Y-%m-%d %H:%M') }}</li>
-                            <li><strong>Venue:</strong> {{ registration.event.venue }}</li>
-                            <li><strong>Registered on:</strong> {{ registration.registration_date.strftime('%Y-%m-%d %H:%M') }}</li>
-                        </ul>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>You haven't registered for any events yet.</p>
-                <a href="{{ url_for('index') }}" class="btn btn-primary">Browse Events</a>
-                {% endif %}
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Announcements - FestX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #b19cd9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .event-box {
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 80%;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: 0.3s;
+        }
+        .social-links a:hover {
+            color: #b19cd9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FestX 2025</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="events.html">Events</a>
+            <a href="quizzes.html">Quizzes</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html">Profile</a>
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </nav>
+    </header>
+    
+    <div class="content">
+        <h2>Latest Announcements</h2>
+        <div class="event-box">
+            <p><strong>Posted:</strong> Important</p>
+            <p>No announcements yet.</p>
+        </div>
+        
+        <h2>Upcoming Events</h2>
+        <div class="event-box">
+            <p><strong>Date:</strong> To be announced</p>
+            <p><strong>Venue:</strong> To be announced</p>
+            <p><strong>Capacity:</strong> participants</p>
+            <a href="register.html" class="btn">Register</a>
+            <p>Login to Register</p>
         </div>
     </div>
-
-    <!-- Quiz Attempts -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">My Quiz Attempts</h4>
-            </div>
-            <div class="card-body">
-                {% if quiz_attempts %}
-                <div class="list-group">
-                    {% for attempt in quiz_attempts %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ attempt.quiz.title }}</h5>
-                        <p class="mb-1">Score: {{ attempt.score }}</p>
-                        <small>Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</small>
-                        {% if attempt.completed %}
-                        <span class="badge bg-success">Completed</span>
-                        {% else %}
-                        <span class="badge bg-warning">In Progress</span>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>You haven't attempted any quizzes yet.</p>
-                {% endif %}
-            </div>
+    
+    <footer>
+        <p>&copy; 2025 FestX. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">X</a>
         </div>
-    </div>
-</div>
-{% endblock %} 
+        
+    </footer>
+</body>
+</html>

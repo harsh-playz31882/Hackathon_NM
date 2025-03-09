@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Page - FestX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        .event-details {
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 80%;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        .btn {
+            display: inline-block;
+            background: #5a189a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="event-title">Event Name</h1>
+        <p id="event-description">Event Description</p>
+    </header>
+
+    <section class="event-details">
+        <h2>Event Details</h2>
+        <p><strong>📅 Date:</strong> <span id="event-date"></span></p>
+        <p><strong>⏰ Time:</strong> <span id="event-time"></span></p>
+        <p><strong>📍 Venue:</strong> <span id="event-venue"></span></p>
+        <p><strong>🏆 Prize Pool:</strong> <span id="event-prize"></span></p>
+    </section>
+
+    <a href="index.html" class="btn">Back to FestX</a>
+
+    <script>
+        const events = {
+            "counterstrike": { title: "Counter-Strike 2 Battle", description: "Get ready for the ultimate CS2 showdown!", date: "March 15, 2025", time: "9:00 AM - 12:00 PM", venue: "College Gaming Arena", prize: "$5000" },
+            "fifa": { title: "FIFA Championship", description: "Show your FIFA skills and dominate the field!", date: "March 15, 2025", time: "12:30 PM - 3:00 PM", venue: "Sports Hall", prize: "$3000" },
+            "bgmi": { title: "BGMI/PUBG Mobile Showdown", description: "Survive and conquer in this battle royale event!", date: "March 15, 2025", time: "12:30 PM - 3:00 PM", venue: "Gaming Arena", prize: "$4000" },
+            "hackathon": { title: "Hackathon", description: "Code your way to innovation and success!", date: "March 15-16, 2025", time: "3:30 PM - Next Day", venue: "Tech Hub", prize: "$8000" },
+            "memewar": { title: "Meme War", description: "Create the funniest memes and win big!", date: "March 15, 2025", time: "6:30 PM - 9:00 PM", venue: "Creative Lounge", prize: "$1000" },
+            "graffiti": { title: "Graffiti Wall", description: "Show your artistic skills on the graffiti wall!", date: "March 15-16, 2025", time: "All Day", venue: "Art Corner", prize: "$1500" },
+            "bands": { title: "Battle of the Bands", description: "Rock the stage and win the battle of music!", date: "March 16, 2025", time: "9:00 AM - 12:00 PM", venue: "Main Stage", prize: "$5000" },
+            "comedy": { title: "Stand-up Comedy Night", description: "Make the audience laugh and steal the spotlight!", date: "March 16, 2025", time: "12:30 PM - 3:00 PM", venue: "Auditorium", prize: "$2000" },
+            "poetry": { title: "Poetry Slam", description: "Express your creativity through poetry!", date: "March 16, 2025", time: "12:30 PM - 3:00 PM", venue: "Literary Hall", prize: "$1500" }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventKey = urlParams.get('event');
+        if (events[eventKey]) {
+            document.getElementById('event-title').innerText = events[eventKey].title;
+            document.getElementById('event-description').innerText = events[eventKey].description;
+            document.getElementById('event-date').innerText = events[eventKey].date;
+            document.getElementById('event-time').innerText = events[eventKey].time;
+            document.getElementById('event-venue').innerText = events[eventKey].venue;
+            document.getElementById('event-prize').innerText = events[eventKey].prize;
+        }
+    </script>
+</body>
+</html>

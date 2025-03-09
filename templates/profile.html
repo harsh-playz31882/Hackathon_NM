@@ -1,82 +1,103 @@
-{% extends "base.html" %}
-
-{% block title %}Profile - College Fest{% endblock %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">User Profile</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('update_profile') }}">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-                    </div>
-                    <hr>
-                    <h5>Change Password</h5>
-                    <div class="mb-3">
-                        <label for="current_password" class="form-label">Current Password</label>
-                        <input type="password" class="form-control" id="current_password" name="current_password">
-                    </div>
-                    <div class="mb-3">
-                        <label for="new_password" class="form-label">New Password</label>
-                        <input type="password" class="form-control" id="new_password" name="new_password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </form>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - FestX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        .content {
+            padding: 20px;
+        }
+        .profile-box {
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 50%;
+            text-align: left;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        label, input {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .btn {
+            background: #5a189a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+        }
+        .btn:hover {
+            background: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+    </header>
+    
+    <div class="content">
+        <div class="profile-box">
+            <h2>Profile Information</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+            
+            <label for="email">Email address:</label>
+            <input type="email" id="email" placeholder="Enter your email">
+            
+            <h2>Change Password</h2>
+            <label for="current-password">Current Password:</label>
+            <input type="password" id="current-password" placeholder="Current Password">
+            
+            <label for="new-password">New Password:</label>
+            <input type="password" id="new-password" placeholder="New Password">
+            
+            <button class="btn">Update Profile</button>
         </div>
-
-        <!-- User's Event Registrations -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h4 class="mb-0">My Event Registrations</h4>
-            </div>
-            <div class="card-body">
-                {% if user.registrations %}
-                <div class="list-group">
-                    {% for registration in user.registrations %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ registration.event.name }}</h5>
-                        <p class="mb-1">{{ registration.event.description }}</p>
-                        <small>Registered on: {{ registration.registration_date.strftime('%Y-%m-%d %H:%M') }}</small>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>You haven't registered for any events yet.</p>
-                {% endif %}
-            </div>
+        
+        <div class="profile-box">
+            <h2>My Event Registrations</h2>
+            <p><strong>Registered on:</strong></p>
+            <p>You haven't registered for any events yet.</p>
         </div>
-
-        <!-- User's Quiz Attempts -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h4 class="mb-0">My Quiz Attempts</h4>
-            </div>
-            <div class="card-body">
-                {% if user.quiz_attempts %}
-                <div class="list-group">
-                    {% for attempt in user.quiz_attempts %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ attempt.quiz.title }}</h5>
-                        <p class="mb-1">Score: {{ attempt.score }}</p>
-                        <small>Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</small>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>You haven't attempted any quizzes yet.</p>
-                {% endif %}
-            </div>
+        
+        <div class="profile-box">
+            <h2>My Quiz Attempts</h2>
+            <p><strong>Score:</strong></p>
+            <p><strong>Attempted on:</strong></p>
+            <p>You haven't attempted any quizzes yet.</p>
         </div>
     </div>
-</div>
-{% endblock %} 
+    
+    <footer>
+        <p>&copy; 2025 FestX. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

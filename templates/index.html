@@ -1,73 +1,156 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Fest 2024</title>
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+            padding: 40px 20px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+            background: rgba(30, 30, 60, 0.9);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #b19cd9;
+        }
+        .content {
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 80%;
+            max-width: 1200px;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+            margin: 0;
+            padding: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            background: #5a189a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #7b2cbf;
+            transform: translateY(-2px);
+        }
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .event-card {
+            background: rgba(40, 40, 80, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(123, 44, 191, 0.5);
+        }
+        .announcement {
+            border-left: 4px solid #5a189a;
+            padding-left: 20px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .priority-high {
+            border-color: #ff4444;
+        }
+        .priority-normal {
+            border-color: #5a189a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>College Fest 2024</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('events') }}">Events</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
 
-{% block title %}Home - College Fest{% endblock %}
+    <div class="content">
+        <h2>Latest Announcements</h2>
+        {% if announcements %}
+            {% for announcement in announcements %}
+                <div class="announcement priority-{{ announcement.priority }}">
+                    <h3>{{ announcement.title }}</h3>
+                    <p>{{ announcement.content }}</p>
+                    <small>Posted: {{ announcement.date_posted.strftime('%B %d, %Y') }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No announcements yet.</p>
+        {% endif %}
+    </div>
 
-{% block content %}
-<div class="row">
-    <!-- Announcements Section -->
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">Latest Announcements</h4>
-            </div>
-            <div class="card-body">
-                {% if announcements %}
-                <div class="list-group">
-                    {% for announcement in announcements %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ announcement.title }}</h5>
-                        <p class="mb-1">{{ announcement.content }}</p>
-                        <small class="text-muted">Posted: {{ announcement.date_posted.strftime('%Y-%m-%d %H:%M') }}</small>
-                        {% if announcement.priority == 'high' %}
-                        <span class="badge bg-danger">Important</span>
+    <div class="content">
+        <h2>Upcoming Events</h2>
+        <div class="event-grid">
+            {% if events %}
+                {% for event in events %}
+                    <div class="event-card">
+                        <h3>{{ event.title }}</h3>
+                        <p>{{ event.description }}</p>
+                        <p><strong>Date:</strong> {{ event.date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                        <p><strong>Venue:</strong> {{ event.venue }}</p>
+                        <p><strong>Capacity:</strong> {{ event.registered_count }}/{{ event.capacity }} Participants</p>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('event_details', event_id=event.id) }}" class="btn">View Details</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn">Login to Register</a>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>No announcements yet.</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Events Section -->
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">Upcoming Events</h4>
-            </div>
-            <div class="card-body">
-                {% if events %}
-                <div class="row">
-                    {% for event in events %}
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ event.name }}</h5>
-                                <p class="card-text">{{ event.description }}</p>
-                                <ul class="list-unstyled">
-                                    <li><strong>Date:</strong> {{ event.date.strftime('%Y-%m-%d %H:%M') }}</li>
-                                    <li><strong>Venue:</strong> {{ event.venue }}</li>
-                                    <li><strong>Capacity:</strong> {{ event.capacity }} participants</li>
-                                </ul>
-                                {% if current_user.is_authenticated %}
-                                <form action="{{ url_for('register_event', event_id=event.id) }}" method="POST">
-                                    <button type="submit" class="btn btn-primary">Register</button>
-                                </form>
-                                {% else %}
-                                <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Register</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
+                {% endfor %}
+            {% else %}
                 <p>No upcoming events.</p>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
-</div>
-{% endblock %} 
+</body>
+</html>
+
+
+            

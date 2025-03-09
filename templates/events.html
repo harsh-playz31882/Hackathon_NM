@@ -1,55 +1,92 @@
-{% extends "base.html" %}
 
-{% block title %}Events - College Fest{% endblock %}
 
-{% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">All Events</h4>
-            </div>
-            <div class="card-body">
-                {% if events %}
-                <div class="row">
-                    {% for event in events %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ event.name }}</h5>
-                                <p class="card-text">{{ event.description }}</p>
-                                <ul class="list-unstyled">
-                                    <li><strong>Date:</strong> {{ event.date.strftime('%Y-%m-%d %H:%M') }}</li>
-                                    <li><strong>Venue:</strong> {{ event.venue }}</li>
-                                    <li><strong>Capacity:</strong> {{ event.capacity }} participants</li>
-                                    <li><strong>Registered:</strong> {{ event.registrations|length }} / {{ event.capacity }}</li>
-                                </ul>
-                                <div class="mt-3">
-                                    <a href="{{ url_for('event_details', event_id=event.id) }}" class="btn btn-info">View Details</a>
-                                    {% if current_user.is_authenticated %}
-                                        {% if not event in current_user.registrations|map(attribute='event') %}
-                                            <form action="{{ url_for('register_event', event_id=event.id) }}" method="POST" class="d-inline">
-                                                <button type="submit" class="btn btn-primary" {% if event.registrations|length >= event.capacity %}disabled{% endif %}>
-                                                    Register
-                                                </button>
-                                            </form>
-                                        {% else %}
-                                            <button class="btn btn-success" disabled>Registered</button>
-                                        {% endif %}
-                                    {% else %}
-                                        <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Register</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+<header>
+    <h1>College Fest Events</h1>
+    <p style="font-size: 1.5em; font-weight: bold;">Join us for an unforgettable experience!</p>
+</header>
+
+<style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #b19cd9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .event-box {
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 80%;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: 0.3s;
+        }
+        .social-links a:hover {
+            color: #b19cd9;
+        }
+    </style>
+
+<div class="container">
+    <div class="row">
+     
+        <div class="col-md-6 mb-4">
+            <div class="event-container">
+                <div class="event-card">
+                    <div class="event-details">
+                        <h3></h3>
+                        <p class="event-date"> 15,16,17 </p>
+                        <p></p>
+                        <p><strong>Capacity:</strong>  100</p>
+                        <p><strong>Available Slots:</strong> 50</p>
+                       
+                           
+                                <button class="btn btn-success" disabled>Registered</button>
+                           
+                                <a href="register.html" class="btn btn-register">Register Now</a>
+                          
+                                <button class="btn btn-secondary" disabled>Event Full</button>
+                          
+                        
+                            <a href="login.html" class="btn btn-register">Login to Register</a>
+                        
                     </div>
-                    {% endfor %}
                 </div>
-                {% else %}
-                <p>No events available at the moment.</p>
-                {% endif %}
             </div>
         </div>
+     
     </div>
 </div>
-{% endblock %} 

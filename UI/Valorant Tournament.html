@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take Quiz - FestX</title>
+    <title>Valorant Tournament - FestX</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -18,14 +18,13 @@
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
         }
-        .quiz-container {
+        .event-details {
             background: rgba(30, 30, 60, 0.9);
             padding: 20px;
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
             width: 80%;
-            text-align: left;
         }
         h1, h2 {
             color: #b19cd9;
@@ -45,37 +44,21 @@
         .btn:hover {
             background: #7b2cbf;
         }
-        .question {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Take Quiz</h1>
-        <p>Test your knowledge and challenge yourself at FestX!</p>
+        <h1>Valorant Tournament</h1>
+        <p>Join the ultimate Valorant battle at FestX 2025!</p>
     </header>
 
-    <section class="quiz-container">
-        <h2></h2>
-        <p></p>
-
-     
-        <div class="question">
-            <p><strong>Question :</strong> </p>
-        
-            <label>
-                <input type="radio" name="question_{{ loop.index }}" value="{{ option }}"> 
-            </label><br>
-           
-        </div>
-    
-
-        <button class="btn">Submit Quiz</button>
-        <button class="btn">Cancel</button>
+    <section class="event-details">
+        <h2>Event Details</h2>
+        <p><strong>📅 Date:</strong> March 15, 2025</p>
+        <p><strong>⏰ Time:</strong> 9:00 AM – 12:00 PM (Round 1 & 2)</p>
+        <p><strong>🎮 Game:</strong> Valorant 5v5 Tournament</p>
+        <p><strong>🏆 Prize Pool:</strong> $5000</p>
+        <p><strong>📍 Venue:</strong> College Gaming Arena</p>
     </section>
 
     <a href="index.html" class="btn">Back to FestX</a>

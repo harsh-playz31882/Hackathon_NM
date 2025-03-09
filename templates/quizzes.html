@@ -1,55 +1,111 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Fest Quizzes</title>
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(135deg, #10002b,  #7b2cbf, #7b2cbf, #5a189a, #7b2cbf);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+        }
+        .content {
+            background: rgba(123, 44, 181, 0.9);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            width: 80%;
+        }
+        h1, h2 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        .btn {
+            display: inline-block;
+            background: #5a189a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="events.html">Events</a>
+            <a href="quizzes.html">Quizzes</a>
+       
+                <a href="dashboard.html">Dashboard</a>
+                <a href="profile.html">Profile</a>
+                <a href="login.html">Logout</a>
+            
+                <a href="take_quiz.html">Login</a>
+                <a href="login.html">Register</a>
+          
+        </div>
+    </nav>
 
-{% block title %}Quizzes - College Fest{% endblock %}
-
-{% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">Available Quizzes</h4>
+ 
+            <div class="flash-messages">
+                
+                    <div class="flash-message">
+                    
+                    </div>
+               
             </div>
-            <div class="card-body">
-                {% if quizzes %}
-                <div class="row">
-                    {% for quiz in quizzes %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ quiz.title }}</h5>
-                                <p class="card-text">{{ quiz.description }}</p>
-                                <p><strong>Questions:</strong> {{ quiz.questions|length }}</p>
-                                
-                                {% if current_user.is_authenticated %}
-                                    {% set completed_attempt = none %}
-                                    {% for attempt in quiz.attempts %}
-                                        {% if attempt.user_id == current_user.id and attempt.completed %}
-                                            {% set completed_attempt = attempt %}
-                                        {% endif %}
-                                    {% endfor %}
+       
 
-                                    {% if completed_attempt %}
-                                        <div class="mb-3">
-                                            <span class="badge bg-success">Completed</span>
-                                            <p class="mt-2">Your Score: {{ completed_attempt.score }}/{{ quiz.questions|length }}</p>
-                                            <a href="{{ url_for('quiz_results', attempt_id=completed_attempt.id) }}" class="btn btn-info">View Results</a>
-                                        </div>
-                                    {% else %}
-                                        <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-primary">Take Quiz</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Take Quiz</a>
-                                {% endif %}
-                            </div>
+    <div class="container">
+        <h1>Available Quizzes</h1>
+        
+        <div class="quiz-grid">
+            
+                    <div class="quiz-card">
+                        <h2></h2>
+                        <p></p>
+                        <div class="quiz-info">
+                            <span></span>
+                            
+
+                                <a href="take_quiz.html" class="btn btn-primary">Take Quiz</a>
+                           
+                                
+                           
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>No quizzes available at the moment.</p>
-                {% endif %}
-            </div>
+                
+                <p style="text-align: center; grid-column: 1/-1;">No quizzes available at the moment.</p>
+     
         </div>
     </div>
-</div>
-{% endblock %} 
+
+    <script>
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(() => {
+            const flashMessages = document.querySelector('.flash-messages');
+            if (flashMessages) {
+                flashMessages.style.opacity = '0';
+                flashMessages.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => flashMessages.remove(), 500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

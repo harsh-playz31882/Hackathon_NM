@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration - FestX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 40%;
+            margin: auto;
+            background: rgba(30, 30, 60, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #b19cd9;
+            text-shadow: 0 0 15px #7b2cbf;
+        }
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            background: #10002b;
+            color: white;
+        }
+        button {
+            background: #5a189a;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="register.html" style="color: #b19cd9;">Register Here</a></p>
+    </div>
+
+    <div class="container">
+        <h1>Register</h1>
+        <form>
+            <input type="text" placeholder="Full Name" required>
+            <input type="text" placeholder="Schol/College Name" required>
+            <input type="tel" placeholder="Phone Number" required>
+            <input type="email" placeholder="Email" required>
+            
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html" style="color: #b19cd9;">Login Here</a></p>
+    </div>
+</body>
+</html>

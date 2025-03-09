@@ -41,11 +41,12 @@ class User(UserMixin, db.Model):
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     venue = db.Column(db.String(100), nullable=False)
     capacity = db.Column(db.Integer)
+    registered_count = db.Column(db.Integer, default=0)
     registrations = db.relationship('EventRegistration', backref='event', lazy=True)
 
 class EventRegistration(db.Model):
@@ -97,9 +98,13 @@ class Announcement(db.Model):
 # Routes
 @app.route('/')
 def index():
+    return render_template('base.html')
+
+@app.route('/home')
+def home():
     events = Event.query.all()
     announcements = Announcement.query.order_by(Announcement.date_posted.desc()).limit(5).all()
-    return render_template('index.html', events=events, announcements=announcements)
+    return render_template('base.html', events=events, announcements=announcements)
 
 @app.route('/events')
 def events():
@@ -127,7 +132,7 @@ def register_event(event_id):
         return redirect(url_for('event_details', event_id=event_id))
     
     # Check if event is full
-    if event.capacity and len(event.registrations) >= event.capacity:
+    if event.capacity and event.registered_count >= event.capacity:
         flash('Sorry, this event is already full!', 'error')
         return redirect(url_for('event_details', event_id=event_id))
     
@@ -139,6 +144,7 @@ def register_event(event_id):
     
     try:
         db.session.add(registration)
+        event.registered_count += 1
         db.session.commit()
         flash('Successfully registered for the event!', 'success')
     except Exception as e:
@@ -160,11 +166,12 @@ def get_events():
     events = Event.query.all()
     return jsonify([{
         'id': e.id,
-        'name': e.name,
+        'title': e.title,
         'description': e.description,
         'date': e.date.strftime('%Y-%m-%d %H:%M'),
         'venue': e.venue,
-        'capacity': e.capacity
+        'capacity': e.capacity,
+        'registered_count': e.registered_count
     } for e in events])
 
 @app.route('/api/announcements', methods=['GET'])
@@ -190,7 +197,6 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
-        # Validation
         if not username or not email or not password or not confirm_password:
             flash('All fields are required!', 'error')
             return redirect(url_for('register'))
@@ -199,7 +205,6 @@ def register():
             flash('Passwords do not match!', 'error')
             return redirect(url_for('register'))
         
-        # Check if username or email already exists
         if User.query.filter_by(username=username).first():
             flash('Username already exists!', 'error')
             return redirect(url_for('register'))
@@ -208,15 +213,13 @@ def register():
             flash('Email already registered!', 'error')
             return redirect(url_for('register'))
         
-        # Create new user
-        new_user = User(
-            username=username,
-            email=email,
-            password=generate_password_hash(password),
-            is_admin=False
-        )
-        
         try:
+            new_user = User(
+                username=username,
+                email=email,
+                password=generate_password_hash(password),
+                is_admin=False
+            )
             db.session.add(new_user)
             db.session.commit()
             flash('Registration successful! Please login.', 'success')
@@ -236,23 +239,25 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        remember = True if request.form.get('remember') else False
+        
+        if not username or not password:
+            flash('Please enter both username and password.', 'error')
+            return redirect(url_for('login'))
         
         user = User.query.filter_by(username=username).first()
         
-        # Check if user exists and password is correct
         if not user or not check_password_hash(user.password, password):
-            flash('Please check your login details and try again.', 'error')
+            flash('Invalid username or password. Please try again.', 'error')
             return redirect(url_for('login'))
         
-        # Log in user
-        login_user(user, remember=remember)
-        
-        # Get the page they wanted to access (if any)
-        next_page = request.args.get('next')
-        
+        login_user(user)
         flash('Logged in successfully!', 'success')
-        return redirect(next_page or url_for('dashboard'))
+        
+        next_page = request.args.get('next')
+        if next_page:
+            return redirect(next_page)
+        
+        return redirect(url_for('dashboard'))
     
     return render_template('login.html')
 
@@ -260,7 +265,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'success')
+    flash('You have been logged out successfully.', 'success')
     return redirect(url_for('index'))
 
 @app.route('/profile')
@@ -383,48 +388,77 @@ def init_db():
             db.session.commit()
             print("Admin user created successfully!")
             
-            # Add sample event
-            event = Event(
-                name='Welcome Fest 2024',
-                description='Annual college welcome festival',
-                date=datetime(2024, 3, 15, 10, 0),
-                venue='College Auditorium',
-                capacity=200
-            )
-            db.session.add(event)
+            # Add sample events
+            events = [
+                {
+                    'title': 'Valorant Tournament',
+                    'description': 'Competitive 5v5 tactical shooter tournament',
+                    'date': datetime(2024, 3, 30, 10, 0),
+                    'venue': 'NMIMS Gaming Arena',
+                    'capacity': 50
+                },
+                {
+                    'title': 'Hackathon 2024',
+                    'description': 'Annual 24-hour coding competition',
+                    'date': datetime(2024, 3, 30, 9, 0),
+                    'venue': 'NMIMS Tech Hub',
+                    'capacity': 100
+                },
+                {
+                    'title': 'Battle of Bands',
+                    'description': 'Live music competition for college bands',
+                    'date': datetime(2024, 3, 30, 14, 0),
+                    'venue': 'NMIMS Auditorium',
+                    'capacity': 200
+                }
+            ]
             
-            # Add sample announcement
-            announcement = Announcement(
-                title='Welcome to College Fest 2024',
-                content='Get ready for the biggest college fest of the year!',
-                priority='high'
-            )
-            db.session.add(announcement)
+            for event_data in events:
+                event = Event(**event_data)
+                db.session.add(event)
+            
+            # Add sample announcements
+            announcements = [
+                {
+                    'title': 'Event Registration Open!',
+                    'content': 'Registration for all events is now open. Register early to secure your spot!',
+                    'priority': 'high'
+                },
+                {
+                    'title': 'Venue Update',
+                    'content': 'All events will be held at NMIMS campus. Check event details for specific locations.',
+                    'priority': 'normal'
+                }
+            ]
+            
+            for announcement_data in announcements:
+                announcement = Announcement(**announcement_data)
+                db.session.add(announcement)
             
             # Add sample quiz
             quiz = Quiz(
-                title='College Trivia',
-                description='Test your knowledge about our college'
+                title='College Fest Quiz',
+                description='Test your knowledge about our college fest events'
             )
             db.session.add(quiz)
-            db.session.commit()  # Commit to get quiz ID
+            db.session.commit()
             
             # Add sample questions
             questions = [
                 {
-                    'text': 'What year was our college founded?',
-                    'options': ['1960', '1965', '1970', '1975'],
-                    'correct': '1965'
+                    'text': 'Which game is featured in our esports tournament?',
+                    'options': ['Valorant', 'CS:GO', 'PUBG', 'Fortnite'],
+                    'correct': 'Valorant'
                 },
                 {
-                    'text': 'Who is the current college principal?',
-                    'options': ['Dr. Smith', 'Dr. Johnson', 'Dr. Williams', 'Dr. Brown'],
-                    'correct': 'Dr. Smith'
+                    'text': 'How long is the Hackathon event?',
+                    'options': ['12 hours', '24 hours', '36 hours', '48 hours'],
+                    'correct': '24 hours'
                 },
                 {
-                    'text': 'How many departments does our college have?',
-                    'options': ['5', '7', '10', '12'],
-                    'correct': '7'
+                    'text': 'Where is the Battle of Bands being held?',
+                    'options': ['Main Ground', 'Cafeteria', 'Auditorium', 'Classroom'],
+                    'correct': 'Auditorium'
                 }
             ]
             
@@ -439,6 +473,7 @@ def init_db():
             
             db.session.commit()
             print("Sample data added successfully!")
+            
     except Exception as e:
         print(f"Error during database initialization: {e}")
         db.session.rollback()

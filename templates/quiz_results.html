@@ -1,36 +1,70 @@
-{% extends "base.html" %}
-
-{% block title %}Quiz Results - College Fest{% endblock %}
-
-{% block content %}
+<style>
+    body {
+        background: #0a0a1a;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    header {
+        background: linear-gradient(135deg, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(123, 44, 191, 0.9);
+    }
+    .content {
+        background: rgba(30, 30, 60, 0.9);
+        padding: 20px;
+        margin: 20px auto;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(123, 44, 191, 0.7);
+        width: 80%;
+    }
+    h1, h2 {
+        color: #b19cd9;
+        text-shadow: 0 0 15px #7b2cbf;
+    }
+    .btn {
+        display: inline-block;
+        background: #5a189a;
+        color: white;
+        padding: 10px 20px;
+        margin: 10px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        background: #7b2cbf;
+    }
+</style>
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0">Quiz Results: {{ attempt.quiz.title }}</h4>
+                <h4 class="mb-0">Quiz Results: }</h4>
             </div>
             <div class="card-body">
                 <div class="text-center mb-4">
                     <h5>Your Score</h5>
-                    <h2>{{ attempt.score }}/{{ attempt.quiz.questions|length }}</h2>
-                    <p class="text-muted">Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <h2>/20</h2>
+                    <p class="text-muted">Attempted on: </p>
                     
-                    {% set percentage = (attempt.score / attempt.quiz.questions|length * 100)|round|int %}
-                    {% if percentage >= 80 %}
+                    
                         <div class="alert alert-success">Excellent! Great job!</div>
-                    {% elif percentage >= 60 %}
+                    
                         <div class="alert alert-info">Good effort! Keep it up!</div>
-                    {% else %}
+                    
                         <div class="alert alert-warning">Keep practicing! You can do better!</div>
-                    {% endif %}
+                    
                 </div>
 
                 <div class="text-center mt-4">
-                    <a href="{{ url_for('quizzes') }}" class="btn btn-primary">Back to Quizzes</a>
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Go to Dashboard</a>
+                    <a href="quizzes.html" class="btn btn-primary">Back to Quizzes</a>
+                    <a href="dashboard.html" class="btn btn-secondary">Go to Dashboard</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %} 
+ 
